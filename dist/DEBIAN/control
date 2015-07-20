@@ -1,0 +1,7 @@
+Package: creatuity-basemod
+Version: 1.0
+Section: base
+Architecture: amd64
+Maintainer: Adam Tumielewicz <atumielewicz@creatuity.pl>
+Description: Creatuity basmod updater
+Depends: git
