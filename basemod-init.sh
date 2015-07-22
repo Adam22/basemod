@@ -6,10 +6,10 @@ CURRENTPATH=`pwd`
 ACTION=$1
 
 function cloneBasemod {
-	if ! [ -d "basmode" ]; then		
-		mkdir basemod
-	fi
-	cd basemod	
+	if ! [ -d "basmode" ] && [$(basename `pwd`) -eq "basemod"]; then		
+		mkdir basemod	
+		cd basemod
+	fi	
 	if [ -d ".git" ]; then
 		echo .git exist;
 	else
@@ -22,6 +22,8 @@ function updateBasemod {
 	if [ -d ".git" ]; then
 		echo .git exist;
 		git pull origin master 
+	else
+		echo "no git repository"
 	fi
 }
 function preparePackage {
@@ -34,20 +36,27 @@ function preparePackage {
 			make -f Makefile
 		fi
 	fi
-
 }
 
-case $ACTION in
-	'--install')
-		./basemod-test.sh
-		;;
-	'--populate')
-		;;
-	'--build-deb')
-		preparePackage;
-		pwd
-		cat VERSION
-		;;
-	'--updade')
-		;;
-esac
+function createBasemodDeb {
+	cloneBasemod;
+	updateBasemod
+}
+while (( "$#" )); do
+	case $ACTION in
+		'--install-basemod')
+			./basemod-test.sh
+			;;
+		'--update-repository')
+			;;
+		'--updade-basemod')
+			preparePackage;
+			pwd
+			cat VERSION
+			;;
+			*)
+			echo $1
+			;;
+	esac
+shift
+done
