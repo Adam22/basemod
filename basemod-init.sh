@@ -74,47 +74,94 @@ function populate {
 ###########################
 # getopts section
 
-OPT_A=A
-OPT_B=B
-OPT_C=C
-OPT_D=D
+OPT_I=I
+OPT_S=S
+OPT_P=P
+OPT_U=U
 
 #Set fonts for Help.
-#NORM=`tput sgr0`
-#BOLD=`tput bold`
-#REV=`tput smso`
+NORM=`tput sgr0`
+BOLD=`tput bold`
+REV=`tput smso`
 
 function help {
 	echo -e \\n "Help documentation for ${BOLD}${SCRIPT}. ${NORM}"\\n
 	echo -e "${REV}Basic usage:${NORM} ${BOLD}$SCRIPT file.ext${NORM}"\\n
 	echo "Command line switches are optional. The following switches are recognized."
-	echo "${REV}-a${NORM}  --Sets the value for option ${BOLD}a${NORM}. Default is ${BOLD}A${NORM}."
-	echo "${REV}-b${NORM}  --Sets the value for option ${BOLD}b${NORM}. Default is ${BOLD}B${NORM}."
-	echo "${REV}-c${NORM}  --Sets the value for option ${BOLD}c${NORM}. Default is ${BOLD}C${NORM}."
-	echo "${REV}-d${NORM}  --Sets the value for option ${BOLD}d${NORM}. Default is ${BOLD}D${NORM}."
+	echo "${REV}-i${NORM}  --Install basemod in magento project ${BOLD}a${NORM}. Default is ${BOLD}A${NORM}."
+	echo "${REV}-s${NORM}  --Symlink basemod to magento project ${BOLD}b${NORM}. Default is ${BOLD}B${NORM}."
+	echo "${REV}-p${NORM}  --Populate basemod to developer workstations ${BOLD}c${NORM}. Default is ${BOLD}C${NORM}."
+	echo "${REV}-u${NORM}  --Sets the value for option ${BOLD}d${NORM}. Default is ${BOLD}D${NORM}."
 	echo -e "${REV}-h${NORM}  --Displays this help message. No further functions are performed."\\n
-	echo -e "Example: ${BOLD}$SCRIPT -a foo -b man -c chu -d bar file.ext${NORM}"\\n
+	echo -e "Example: ${BOLD}$SCRIPT -a foo -b man -c chu -d bar"\\n
 	exit 1
 }
 
+NUMARGS=$#
+echo -e \\n"Number of arguments: $NUMARGS"
+if [ $NUMARGS -eq 0 ]; then
+  help
+fi
 
+while getopts :a:b:c:d:h FLAG; do
+  case $FLAG in
+    a)  #set option "a"
+      OPT_A=$OPTARG
+      echo "-a used: $OPTARG"
+      echo "OPT_A = $OPT_A"
+      ;;
+    b)  #set option "b"
+      OPT_B=$OPTARG
+      echo "-b used: $OPTARG"
+      echo "OPT_B = $OPT_B"
+      ;;
+    c)  #set option "c"
+      OPT_C=$OPTARG
+      echo "-c used: $OPTARG"
+      echo "OPT_C = $OPT_C"
+      ;;
+    d)  #set option "d"
+      OPT_D=$OPTARG
+      echo "-d used: $OPTARG"
+      echo "OPT_D = $OPT_D"
+      ;;
+    h)  #show help
+      help
+      ;;
+    \?) #unrecognized option - show help
+      echo -e \\n"Option -${BOLD}$OPTARG${NORM} not allowed."
+      help
+      #If you just want to display a simple error message instead of the full
+      #help, remove the 2 lines above and uncomment the 2 lines below.
+      #echo -e "Use ${BOLD}$SCRIPT -h${NORM} to see the help documentation."\\n
+      #exit 2
+      ;;
+  esac
+done
 
 while (( "$#" )); do
 	case $ACTION in
 		'install')
-			./basemod.sh install
+			#./basemod.sh install
+			echo "install"
 			;;
 		'sym')
-			./basemod.sh sym
+			#./basemod.sh sym
+			echo "sym"
 			;;
 		'populate-basemod')
-			populate-basemod;
+			#populate-basemod;
+			echo "populate-basemod"
 			;;
 		'update-basemod')
-			createBasemodDeb;
+			#reateBasemodDeb;
+			echo "update-basemod"
+			;;
+		'help')
+			help
 			;;
 			*)
-			help
+			
 			;;
 	esac
 shift
